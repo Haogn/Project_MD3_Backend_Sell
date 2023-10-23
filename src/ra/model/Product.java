@@ -8,6 +8,7 @@ public class Product implements Serializable {
     private int productId ;
     private String productName ;
     private String describe ;
+    private Catalog catalog;
     private double importPrice ;
     private double exportPrice ;
     private double profit ;
@@ -18,15 +19,6 @@ public class Product implements Serializable {
 
     }
 
-//    public Product(int productId, String productName, String describe, double importPrice, boolean productStatus, int quantity) {
-//        this.productId = productId;
-//        this.productName = productName;
-//        this.describe = describe;
-//        this.importPrice = importPrice;
-//        this.productStatus = productStatus;
-//        this.quantity = quantity;
-//    }
-
     public Product(int productId, String productName, String describe, double importPrice, double exportPrice, double profit, boolean productStatus, int quantity) {
         this.productId = productId;
         this.productName = productName;
@@ -34,6 +26,18 @@ public class Product implements Serializable {
         this.importPrice = importPrice;
         this.exportPrice = exportPrice * 1.5;
         this.profit = exportPrice - importPrice;
+        this.productStatus = productStatus;
+        this.quantity = quantity;
+    }
+
+    public Product(int productId, String productName, String describe, Catalog catalog, double importPrice, double exportPrice, double profit, boolean productStatus, int quantity) {
+        this.productId = productId;
+        this.productName = productName;
+        this.describe = describe;
+        this.catalog = catalog;
+        this.importPrice = importPrice;
+        this.exportPrice = exportPrice;
+        this.profit = profit;
         this.productStatus = productStatus;
         this.quantity = quantity;
     }
@@ -102,9 +106,17 @@ public class Product implements Serializable {
         this.quantity = quantity;
     }
 
+    public Catalog getCatalog() {
+        return catalog;
+    }
+
+    public void setCatalog(Catalog catalog) {
+        this.catalog = catalog;
+    }
+
     public void displayProduct() {
         System.out.println("");
-        System.out.println("Id : " + productId +" ➖ Ten san pham : "+ productName+" ➖ Mo ta san pham : " +describe+ " ➖ Gia ban : " + exportPrice+" USD ➖ Tinh trang : " + (productStatus?"Mo ban":"Het hang"));
+        System.out.println("Id : " + productId +" ➖ Ten san pham : "+ productName+" ➖ Mo ta san pham : " +describe+ " ➖ Danh muc " + catalog.getCatalogName() +" ➖ Gia ban : " + exportPrice+" USD ➖ Tinh trang : " + (productStatus?"Mo ban":"Het hang"));
         System.out.println("");
     }
 }

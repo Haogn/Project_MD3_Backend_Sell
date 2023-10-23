@@ -29,4 +29,10 @@ public class ProductController {
     public void save(Product product) {
         productService.save(product);
     }
+    public void updateProduc(){
+        productService.updateProduc();
+    }
+    public void deletePro() {
+        productService.deletePro();
+    }
 }

@@ -43,4 +43,12 @@ public class UserController {
     public void changePassword(int id){
         userService.changePassword(id);
     }
+    public void showAllCout(){
+        userService.showAllCout();
+    }
+    public void toggleIsActiveUser(){
+        userService.toggleIsActiveUser();
+    }
+
+
 }

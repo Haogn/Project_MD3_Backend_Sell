@@ -1,9 +1,11 @@
 package ra.service;
 
 import ra.config.InpustMethods;
+import ra.config.Role;
 import ra.model.Address;
 import ra.model.User;
 import ra.util.DataBase;
+import ra.view.Admin;
 import ra.view.UI;
 
 import java.util.ArrayList;
@@ -38,6 +40,7 @@ public class UserService {
 
     // TODO : dang ky
     public void register() {
+        System.out.println("➖➖➖➖➖➖➖➖➖➖➖➖ Dang Ky ➖➖➖➖➖➖➖➖➖➖➖➖➖➖");
         User newUser = new User();
         newUser.setUserId(getNewId());
         System.out.println("Id nguoi dung :" + newUser.getUserId());
@@ -72,6 +75,8 @@ public class UserService {
         newAddress.setSpecifically(InpustMethods.getString());
         newUser.setAddress(newAddress);
         newUser.setUserStatus(false);
+        newUser.setActive(true);
+        newUser.setRoles(Role.USER);
         listUser.add(newUser);
         DataBase<User> userDataBase = new DataBase<>();
         userDataBase.writeToFile(listUser, DataBase.USER_PATH);
@@ -82,37 +87,51 @@ public class UserService {
 
     // TODO : dang nhap
     public void login() {
+        System.out.println("➖➖➖➖➖➖➖➖➖➖➖➖ Dang Nhap ➖➖➖➖➖➖➖➖➖➖➖➖➖➖");
         DataBase<User> userDataBase = new DataBase<>();
         List<User> userLogin = userDataBase.readFormFile(DataBase.USER_PATH);
-        System.out.println("Nhap vao email");
-        String emailLogin = InpustMethods.getEmail();
-        boolean checkLogin = false;
-        for (User user : userLogin) {
-            if (user.getEmail().equals(emailLogin.trim())) {
-                checkLogin = true;
-                break;
-            } else {
-                System.err.println("Email khong trung khop . Vui long nhap lai ❤");
-                login();
-            }
-        }
-        if (checkLogin) {
-            System.out.println("Nhap vao password : ");
-            String pasLogin = InpustMethods.getPassword();
+
+        while (true) {
+            System.out.println("Nhap vao email");
+            String emailLogin = InpustMethods.getEmail();
+            boolean userFound = false;
+
             for (User user : userLogin) {
-                if (user.getPassword().equals(pasLogin.trim())) {
-                    user.setUserStatus(true);
-                    System.out.println("Dang nhap thanh cong ");
-                    // dieu huong den trang nguoi dung
-                    save(user);
-                    menuUser();
-                } else {
-                    System.err.println("Password khong trung khop . Vui long nhap lai ❤");
-                    login();
+                if (user.getEmail().equals(emailLogin)) {
+                    userFound = true;
+                    if (user.isActive()) {
+                        System.out.println("Nhap vao password:");
+                        String pasLogin = InpustMethods.getPassword();
+
+                        if (user.getPassword().equals(pasLogin)) {
+                            user.setUserStatus(true);
+
+                            if (user.getRoles() == Role.USER) {
+                                System.out.println("Dang nhap thanh cong");
+                                // Redirect to the user menu
+                                menuUser();
+                            } else if (user.getRoles() == Role.ADMIN) {
+                                System.out.println("Dang nhap thanh cong");
+                                // Redirect to the admin menu
+                                Admin.menuAdmin();
+                            }
+                        } else {
+                            System.err.println("Password khong trung khop. Vui long nhap lai ❤");
+                        }
+                    } else {
+                        System.err.println("Tai khoan chua kich hoat. Vui long lien he voi quan tri vien.");
+                    }
+                    break;
                 }
+            }
+
+            if (!userFound) {
+                System.err.println("Email khong trung khop. Vui long nhap lai ❤");
             }
         }
     }
+
+
 
     // TODO : user dang dang nhap
     public User userLogin() {
@@ -229,5 +248,30 @@ public class UserService {
             System.err.println("Mat khau khong trung khop ");
             changePassword(id);
         }
+    }
+
+    // TODO ➖➖➖➖➖➖ADMIN➖➖➖➖➖➖➖
+    public void showAllCout(){
+        for (User u : listUser) {
+            if ( u.getRoles() == Role.USER) {
+                u.displayUser();
+            }
+        }
+    }
+    public void toggleIsActiveUser(){
+        System.out.println("Nhap vao Id tai khoan nguoi dung");
+        int id = InpustMethods.getInteger();
+        User toggeStatus = finById(id) ;
+        if (toggeStatus == null) {
+            System.err.println("Khong tim thay nguoi dung trong danh sach");
+            return;
+        }
+        if (toggeStatus.getUserId() == userLogin().getUserId()){
+            System.out.println("Khong the chan hay bo chan tai khoan quan tri vien");
+            return;
+        }
+
+        toggeStatus.setActive(!toggeStatus.isActive());
+
     }
 }

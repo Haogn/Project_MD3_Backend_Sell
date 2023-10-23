@@ -4,13 +4,13 @@ import java.util.Scanner;
 
 public class InpustMethods {
 
-    public static final String ERROR_USENAME = "===>> UseName phải lớn hơn 5 kí tự";
+    public static final String ERROR_USENAME = "❌❌❌ UseName phải lớn hơn 5 kí tự";
 
-    public static final String ERROR_PASS = "===>> password phải lớn hơn 8 kí tự , có ít nhất 1 ký tự đặc biệt và không chứa khoảng trắng";
-    public static final String ERROR_PHONE = "===>> Số điện thoại bạn nhập không đúng định dạng";
-    public static final String ERROR_EMAIL = "===>> Email không đúng định dạng";
-    private static final String ERROR_ALERT = "===>> Định dạng không hợp lệ, hoặc ngoài phạm vi! Vui lòng thử lại....";
-    private static final String EMPTY_ALERT = "===>> Trường nhập vào không thể để trống! Vui lòng thử lại....";
+    public static final String ERROR_PASS = "❌❌❌ password phải lớn hơn 8 kí tự , có ít nhất 1 ký tự đặc biệt và không chứa khoảng trắng";
+    public static final String ERROR_PHONE = "❌❌❌ Số điện thoại bạn nhập không đúng định dạng";
+    public static final String ERROR_EMAIL = "❌❌❌ Email không đúng định dạng";
+    private static final String ERROR_ALERT = "❌❌❌ Định dạng không hợp lệ, hoặc ngoài phạm vi! Vui lòng thử lại....";
+    private static final String EMPTY_ALERT = "❌❌❌ Trường nhập vào không thể để trống! Vui lòng thử lại....";
     /*========================================Input Method Start========================================*/
 
     /**
@@ -144,6 +144,19 @@ public class InpustMethods {
             }
             System.err.println(ERROR_PASS);
         }
+    }
+    public static String getEmail() {
+        while (true) {
+            String result = getString();
+
+            if (result.matches("^[A-Za-z0-9+_.-]{3,}@[A-Za-z0-9.-]{3,}(\\.com?|\\.com.vn?|\\.vn)$")) {
+                // Hợp lệ nếu địa chỉ email có đúng định dạng
+                return result;
+            }
+
+            System.err.println(ERROR_EMAIL);
+        }
+    }
 
 //        while (true) {
 //            System.out.println("\u001B[37mNhap passworld : ");
@@ -157,7 +170,6 @@ public class InpustMethods {
 //            }
 //
 //        }
-    }
 
     public static String getPhoneNumber() {
         while (true) {
@@ -172,18 +184,7 @@ public class InpustMethods {
         }
     }
 
-    public static String getEmail() {
-        while (true) {
-            String result = getString();
 
-            if (result.matches("^[A-Za-z0-9+_.-]{3,}@[A-Za-z0-9.-]{3,}(\\.com?|\\.com.vn?|\\.vn)$")) {
-                // Hợp lệ nếu địa chỉ email có đúng định dạng
-                return result;
-            }
-
-            System.err.println(ERROR_EMAIL);
-        }
-    }
 
     public static String getUseName() {
         while (true) {

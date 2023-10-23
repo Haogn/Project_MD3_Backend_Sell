@@ -17,6 +17,7 @@ public class DataBase<T> {
             out = new FileOutputStream(path);
             outputStream = new ObjectOutputStream(out) ;
             outputStream.writeObject(o);
+            outputStream.close();
         } catch (FileNotFoundException e) {
             System.err.print("");
         } catch (IOException e) {

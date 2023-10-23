@@ -1,6 +1,8 @@
 package ra.service;
 
 import ra.config.InpustMethods;
+import ra.controller.CatalogController;
+import ra.model.Catalog;
 import ra.model.Product;
 import ra.model.User;
 import ra.util.DataBase;
@@ -8,11 +10,13 @@ import ra.util.DataBase;
 import java.util.ArrayList;
 import java.util.List;
 
+import static ra.view.Admin.*;
 
 
 public class ProductService {
     private List<Product> listProduct ;
     private DataBase<Product> productData =new DataBase<>();
+    private CatalogController catalogController = new CatalogController();
 
     public ProductService(){
         List<Product> list= productData.readFormFile(DataBase.PRODUCT_PATH);
@@ -53,6 +57,34 @@ public class ProductService {
         newProduct.setProfit(priceExprot - priceImprot);
         System.out.println("So luong hang nhap vao : ");
         newProduct.setQuantity(InpustMethods.getInteger());
+        System.out.println("Danh muc san pham thuoc ve ");
+        if (catalogController.findAll().isEmpty()) {
+            System.out.println("Danh muc san pham dang rong . Can them danh muc san pham cho san pham" );
+            Catalog newCatalog =  catalogController.createCatalog();
+            newProduct.setCatalog(newCatalog);
+        } else {
+           for (Catalog ca : catalogController.findAll()){
+               ca.displayCatalog();
+           }
+            System.out.println("Nhap vao Id danh muc san pham thuoc ve ");
+           int idCatalog = InpustMethods.getInteger();
+           boolean isDulicate = false;
+           for (Catalog ca : catalogController.findAll()){
+               if(ca.getCatalogId() == idCatalog) {
+                   newProduct.setCatalog(ca);
+                   isDulicate= true;
+                   break;
+               }
+           }
+           if(!isDulicate) {
+               System.err.println("San pham khong thuoc ve nhom san pham ");
+           }
+        }
+        if (newProduct.getQuantity() > 0 ) {
+            newProduct.setProductStatus(true);
+        } else {
+            newProduct.setProductStatus(false);
+        }
         listProduct.add(newProduct);
         productData.writeToFile(listProduct,DataBase.PRODUCT_PATH);
     }
@@ -90,6 +122,72 @@ public class ProductService {
             listProduct.set(listProduct.indexOf(findById(product.getProductId())), product);
         }
         productData.writeToFile(listProduct, DataBase.PRODUCT_PATH);
+    }
+    public void updateProduc(){
+        System.out.println("Nhap vao Id san pham can chinh sua");
+        int id = InpustMethods.getInteger();
+        Product updateProduct = findById(id) ;
+        if ( updateProduct == null ) {
+            System.err.println("Khong tim thay san pham trong danh sach ");
+            return;
+        }
+
+        System.out.println("Ten moi cua san pham ");
+        updateProduct.setProductName(InpustMethods.getString());
+        System.out.println("Mo ta moi cua san pham");
+        updateProduct.setDescribe(InpustMethods.getString());
+        System.out.println("Gia ban : " );
+        double priceImport = InpustMethods.getDouble();
+        updateProduct.setImportPrice(priceImport);
+        double priceExport = priceImport * 1.5;
+        updateProduct.setExportPrice(priceExport);
+        updateProduct.setProfit(priceExport-priceImport);
+        System.out.println("So luong hang nhap vao : ");
+        updateProduct.setQuantity(InpustMethods.getInteger());
+        System.out.println("Danh muc san pham thuoc ve ");
+        for (Catalog ca : catalogController.findAll()){
+            ca.displayCatalog();
+        }
+        System.out.println("Nhap vao Id danh muc san pham thuoc ve ");
+        int idCatalog = InpustMethods.getInteger();
+        boolean isDulicate = false;
+        for (Catalog ca : catalogController.findAll()){
+            if(ca.getCatalogId() == idCatalog) {
+                updateProduct.setCatalog(ca);
+                isDulicate= true;
+                break;
+            }
+        }
+        if(!isDulicate) {
+            System.err.println("San pham khong thuoc ve nhom san pham ");
+        }
+        if (updateProduct.getQuantity() > 0 ) {
+            updateProduct.setProductStatus(true);
+        } else {
+            updateProduct.setProductStatus(false);
+        }
+        save(updateProduct);
+    }
+
+    public void deletePro() {
+        System.out.println("Nhap vao Id san pham can xoa khoi danh sach");
+        int idDelete = InpustMethods.getInteger();
+        Product deleteProduct = findById(idDelete) ;
+        if ( deleteProduct == null) {
+            System.err.println("Khong tim thay san pham can xoa trong danh sach ");
+            return;
+        }
+        System.out.println("Ban muon chac chan muon xoa san pham danh sach chu");
+        System.out.println("1. Co           2. khong  ");
+        System.out.println("Lua chon cua ban : ");
+        int select = InpustMethods.getInteger();
+        if ( select == 1 ) {
+            listProduct.remove(deleteProduct);
+            System.out.println("Xoa san pham thanh cong !!! ");
+            productData.writeToFile(listProduct, DataBase.PRODUCT_PATH);
+        } else if (select == 2){
+            ProductManagement();
+        }
     }
 
 }

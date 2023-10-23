@@ -1,6 +1,7 @@
 package ra.model;
 
 import ra.config.InpustMethods;
+import ra.config.Role;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -14,13 +15,26 @@ public class User implements Serializable {
     private String userName;
     private String email;
     private String password;
-    private Address address ;
-    private String phone ;
-    private boolean userStatus ;
+    private Address address;
+    private String phone;
+    private boolean userStatus;
+    private boolean isActive;
     private List<Cart> cart = new ArrayList<>();
-//    private Set<RoleName> roles = new HashSet<>();
+    private int roles;
+
     public User() {
 
+    }
+
+
+    public User(int userId, String userName, String email, String password, boolean userStatus, int roles, boolean isActive) {
+        this.userId = userId;
+        this.userName = userName;
+        this.email = email;
+        this.password = password;
+        this.userStatus = userStatus;
+        this.roles = roles;
+        this.isActive = isActive;
     }
 
     public User(int userId, String userName, String email, String password, Address address, String phone, boolean userStatus, List<Cart> cart) {
@@ -32,6 +46,19 @@ public class User implements Serializable {
         this.phone = phone;
         this.userStatus = userStatus;
         this.cart = cart;
+    }
+
+    public User(int userId, String userName, String email, String password, Address address, String phone, boolean userStatus, boolean isActive, List<Cart> cart, int roles) {
+        this.userId = userId;
+        this.userName = userName;
+        this.email = email;
+        this.password = password;
+        this.address = address;
+        this.phone = phone;
+        this.userStatus = userStatus;
+        this.isActive = isActive;
+        this.cart = cart;
+        this.roles = roles;
     }
 
     public int getUserId() {
@@ -98,10 +125,31 @@ public class User implements Serializable {
         this.cart = cart;
     }
 
-    public void displayUser(){
+    public boolean isActive() {
+        return isActive;
+    }
+
+    public void setActive(boolean active) {
+        isActive = active;
+    }
+
+    public int getRoles() {
+        return roles;
+    }
+
+    public void setRoles(int roles) {
+        this.roles = roles;
+    }
+
+    public void displayUser() {
+        String role;
+        if (roles == Role.USER) {
+            role = "Nguoi dung";
+        } else if (roles == Role.ADMIN) {
+            role = "Quan tri vien";
+        }
         System.out.println("_____ THONG TIN USER _____");
-        System.out.println("Id : "+ userId+" | Ten tai khoan: " + userName + " | Email : " + email+ " | So dien thoai : " + phone);
-//        System.out.println("Dia chi : " + address.getCity()+" - "+address.getDistrict()+" - "+address.getSpecifically());
+        System.out.println("Id : " + userId + " | Ten tai khoan: " + userName + " | Email : " + email + " | So dien thoai : " + phone+" | Trang thai hoat dong " + (isActive?"Unlocked":"Locked"));
         address.displayAddress();
     }
 }

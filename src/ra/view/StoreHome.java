@@ -1,7 +1,10 @@
 package ra.view;
 
 
+import ra.config.Role;
+import ra.controller.UserController;
 import ra.model.Product;
+import ra.model.User;
 import ra.service.ProductService;
 import ra.service.UserService;
 import ra.util.DataBase;
@@ -10,7 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class StoreHome {
-
+private static UserController userController = new UserController();
 
     public static void main(String[] args) {
 
@@ -30,11 +33,29 @@ public class StoreHome {
         list.add(new Product(12, "OPPO Reno8 5G","Black 8GB 256GB", 6500 ,6500*1.5, (6500*1.5)-6500, true , 100));
        DataBase<Product> productDataBase = new DataBase<>();
        productDataBase.writeToFile(list, DataBase.PRODUCT_PATH);
-//        UserService userService = new UserService();
+
+       // TODO : fix du lieu admin
+        DataBase<User> userDataBase = new DataBase<>();
+        List<User> userList=  userDataBase.readFormFile(DataBase.USER_PATH);
+        User user = new User() ;
+        user.setUserId(userController.getNewId());
+        user.setUserName("ADMIN");
+        user.setEmail("admin@gmail.com");
+        user.setPassword("Admin@123");
+        user.setActive(true);
+        user.setUserStatus(false);
+        user.setRoles(Role.ADMIN);
+        if (userList == null) {
+            userList.add(user );
+            userDataBase.writeToFile(userList, DataBase.USER_PATH);
+        } else {
+            userList.add(user );
+            userDataBase.writeToFile(userList,DataBase.USER_PATH);
+        }
+
+
+        // menu
         UI.menuStore();
-
-
-
 
     }
 }

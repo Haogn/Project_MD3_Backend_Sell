@@ -48,7 +48,7 @@ public class UI {
                     System.err.println("🖐🏻 Thoat khoi chuong trinh . Hen gap lai ❤");
                     break;
                 default:
-                    System.err.println("--->> Lua chon khong phu hop. Vui long chon lai ❤ ");
+                    System.err.println("❌❌❌ Lua chon khong phu hop. Vui long chon lai ❤ ");
             }
         } while (choice != 3) ;
     }
@@ -57,7 +57,7 @@ public class UI {
         int choice ;
         do {
             System.out.println("╔══════════════════════════════════════╗");
-            System.out.println("║             Menu-Nguoi Dung          ║");
+            System.out.println("║             Nguoi Dung               ║");
             System.out.println("║--------------------------------------║");
             System.out.println("║   1    Hien thi danh sach san pham   ║");
             System.out.println("║   2    Tim kiem san pham theo ten    ║");
@@ -96,7 +96,7 @@ public class UI {
                     userController.checkout();
                     return;
                 default:
-                    System.err.println("--->> Lua chon khong phu hop. Vui long chon lai ❤ ");
+                    System.err.println("❌❌❌ Lua chon khong phu hop. Vui long chon lai ❤ ");
             }
 
         } while (true) ;
@@ -106,7 +106,7 @@ public class UI {
         int selectCart ;
         while (true){
             System.out.println("╔══════════════════════════════════════╗");
-            System.out.println("║              Menu-Gio hang           ║");
+            System.out.println("║              Gio hang                ║");
             System.out.println("╟────────┬─────────────────────────────╢");
             System.out.println("║   1    │   Xem danh sach gio hang    ║");
             System.out.println("║   2    │   Chinh sua so luong        ║");
@@ -136,7 +136,7 @@ public class UI {
                 case 6 :
                     menuUser();
                 default:
-                    System.err.println("--->> Lua chon khong phu hop. Vui long chon lai ❤ ");
+                    System.err.println("❌❌❌ Lua chon khong phu hop. Vui long chon lai ❤ ");
             }
         }
     }
@@ -173,9 +173,11 @@ public class UI {
                 case 6:
                     return;
                 default:
-                    System.err.println("--->> Lua chon khong phu hop. Vui long chon lai ❤ ");
+                    System.err.println("❌❌❌ Lua chon khong phu hop. Vui long chon lai ❤ ");
             }
         }
 
     }
+
+
 }

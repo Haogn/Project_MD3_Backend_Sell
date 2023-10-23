@@ -3,12 +3,11 @@ package ra.model;
 import java.io.Serializable;
 
 public class Catalog implements Serializable {
-    private static int nextId = 1 ;
+
     private int catalogId ;
     private String catalogName ;
 
     public Catalog(){
-        this.catalogId = nextId++ ;
     }
 
     public Catalog(int catalogId, String catalogName) {
@@ -37,7 +36,7 @@ public class Catalog implements Serializable {
     }
 
     public void displayCatalog(){
-
+        System.out.println("Id : " +catalogId + " ➖ Ten danh muc : " + catalogName) ;
     }
 }
 

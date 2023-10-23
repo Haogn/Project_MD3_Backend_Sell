@@ -25,7 +25,8 @@ public class ProductService {
         }
         this.listProduct = list;// du lieu doc tu file
     }
-    public int getNewId() {
+
+    public int getNewId() { // TODO : Id tu tang
         int max = 0;
         for (Product pt : listProduct) {
             if (pt.getProductId() > max) {
@@ -35,13 +36,13 @@ public class ProductService {
         return max + 1;
     }
 
-    public void getAll() {
+    public void getAll() { // TODO : show toan bo san pham
         for (Product product : listProduct) {
             product.displayProduct();
         }
     }
 
-    public void add() {
+    public void add() { // TODO : Them moi san pham
         Product newProduct = new Product();
         newProduct.setProductId(getNewId());
         System.out.println("Id san pham : " + newProduct.getProductId());
@@ -61,6 +62,10 @@ public class ProductService {
         if (catalogController.findAll().isEmpty()) {
             System.out.println("Danh muc san pham dang rong . Can them danh muc san pham cho san pham" );
             Catalog newCatalog =  catalogController.createCatalog();
+            List<Catalog> list = new ArrayList<>();
+            list.add(newCatalog);
+            DataBase<Catalog> catalogDataBase = new DataBase<>();
+            catalogDataBase.writeToFile(list , DataBase.CATALOG_PATH);
             newProduct.setCatalog(newCatalog);
         } else {
            for (Catalog ca : catalogController.findAll()){
@@ -88,8 +93,15 @@ public class ProductService {
         listProduct.add(newProduct);
         productData.writeToFile(listProduct,DataBase.PRODUCT_PATH);
     }
+    public void createProduct(){ // TODO : Them 1 hoac nhieu san pham
+        System.out.println("Nhap so luong san pham muon them vao danh sach");
+        int n = InpustMethods.getInteger();
+        for (int i = 0; i < n; i++) {
+            add();
+        }
+    }
 
-    public void searchProductByName() {
+    public void searchProductByName() { // TODO : Tim kiem san pham theo ten
         List<Product> list = productData.readFormFile(DataBase.PRODUCT_PATH);
         System.out.println("Nhap vao ten san pham can tim kiem ");
         String name = InpustMethods.getString();
@@ -106,7 +118,7 @@ public class ProductService {
         }
     }
 
-    public Product findById(int id) {
+    public Product findById(int id) { // TODO : tra ve san pham theo Id
         for (Product pt : listProduct) {
             if (pt.getProductId() == id ) {
                 return pt ;
@@ -115,7 +127,7 @@ public class ProductService {
         return null;
     }
 
-    public void save(Product product) {
+    public void save(Product product) { // TODO : luu lai thong tin san pham thi co thay doi
         if (findById(product.getProductId()) == null) {
             listProduct.add(product);
         } else {
@@ -123,7 +135,7 @@ public class ProductService {
         }
         productData.writeToFile(listProduct, DataBase.PRODUCT_PATH);
     }
-    public void updateProduc(){
+    public void updateProduc(){ // TODO : Update san pham
         System.out.println("Nhap vao Id san pham can chinh sua");
         int id = InpustMethods.getInteger();
         Product updateProduct = findById(id) ;
@@ -145,21 +157,31 @@ public class ProductService {
         System.out.println("So luong hang nhap vao : ");
         updateProduct.setQuantity(InpustMethods.getInteger());
         System.out.println("Danh muc san pham thuoc ve ");
-        for (Catalog ca : catalogController.findAll()){
-            ca.displayCatalog();
-        }
-        System.out.println("Nhap vao Id danh muc san pham thuoc ve ");
-        int idCatalog = InpustMethods.getInteger();
-        boolean isDulicate = false;
-        for (Catalog ca : catalogController.findAll()){
-            if(ca.getCatalogId() == idCatalog) {
-                updateProduct.setCatalog(ca);
-                isDulicate= true;
-                break;
+        if (catalogController.findAll().isEmpty()) {
+            System.out.println("Danh muc san pham dang rong . Can them danh muc san pham cho san pham" );
+            Catalog newCatalog =  catalogController.createCatalog();
+            List<Catalog> list = new ArrayList<>();
+            list.add(newCatalog);
+            DataBase<Catalog> catalogDataBase = new DataBase<>();
+            catalogDataBase.writeToFile(list , DataBase.CATALOG_PATH);
+            updateProduct.setCatalog(newCatalog);
+        } else {
+            for (Catalog ca : catalogController.findAll()){
+                ca.displayCatalog();
             }
-        }
-        if(!isDulicate) {
-            System.err.println("San pham khong thuoc ve nhom san pham ");
+            System.out.println("Nhap vao Id danh muc san pham thuoc ve ");
+            int idCatalog = InpustMethods.getInteger();
+            boolean isDulicate = false;
+            for (Catalog ca : catalogController.findAll()){
+                if(ca.getCatalogId() == idCatalog) {
+                    updateProduct.setCatalog(ca);
+                    isDulicate= true;
+                    break;
+                }
+            }
+            if(!isDulicate) {
+                System.err.println("San pham khong thuoc ve nhom san pham ");
+            }
         }
         if (updateProduct.getQuantity() > 0 ) {
             updateProduct.setProductStatus(true);
@@ -169,7 +191,7 @@ public class ProductService {
         save(updateProduct);
     }
 
-    public void deletePro() {
+    public void deletePro() { // TODO : Xoa san pham khoi danh sach
         System.out.println("Nhap vao Id san pham can xoa khoi danh sach");
         int idDelete = InpustMethods.getInteger();
         Product deleteProduct = findById(idDelete) ;

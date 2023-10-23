@@ -47,4 +47,10 @@ public class OrderController {
     public void showOrderDetail(){
         orderService.showOrderDetail();
     }
+    public void showOrderUsertoAdmin(){
+        orderService.showOrderUsertoAdmin();
+    }
+    public void OrderConfirm(){
+        orderService.OrderConfirm();
+    }
 }

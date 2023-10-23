@@ -15,6 +15,9 @@ public class CatalogController {
     public List<Catalog> findAll(){
         return catalogService.findAll();
     }
+    public void getAll(){
+        catalogService.getAll();
+    }
 
     public Catalog findById(int id){
         return catalogService.findById(id);

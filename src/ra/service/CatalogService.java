@@ -23,6 +23,11 @@ public class CatalogService {
     public List<Catalog> findAll(){
         return catalogs;
     }
+    public void getAll(){
+        for (Catalog c : catalogs) {
+            c.displayCatalog();
+        }
+    }
     public Catalog findById(int id){
         for (Catalog c : catalogs) {
             if (c.getCatalogId() == id ) {

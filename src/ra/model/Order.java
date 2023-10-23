@@ -108,8 +108,8 @@ public class Order implements Serializable {
     }
 
     public void display(){
-        System.out.println("Id : " +id + " | Ten nguoi nhan : "+receiver+ " | So dien thoai : "+ numberPhone);
-        System.out.println("Dia chi : " + address.getCity() + " - " + address.getDistrict() + " - " + address.getSpecifically());
+        System.out.println("Don hang : " +id + " ➖ Ten nguoi nhan : "+receiver+ " ➖ So dien thoai : "+ numberPhone);
+        System.out.println("Dia chi : " + address.getCity() + " ➖ " + address.getDistrict() + " ➖ " + address.getSpecifically());
         System.out.println("Trang thai : " + Message.getStatusByCode(status));
     }
 }

@@ -19,12 +19,7 @@ public class UI {
     public static void menuStore(){
         int choice ;
         do {
-//            System.out.println("----------------------------------------");
-//            System.out.println("_______ WELCOME TO HAOGN'S STORE _______");
-//            System.out.println("1. Dang nhap");
-//            System.out.println("2. Dang ky");
-//            System.out.println("3. Thoat khoi chuong trinh");
-//
+            // TODO :
             System.out.println("╔══════════════════════════════════════╗");
             System.out.println("║        WELCOME TO HAOGN'S STORE      ║");
             System.out.println("║--------------------------------------║");
@@ -38,10 +33,10 @@ public class UI {
             choice = InpustMethods.getInteger();
 
             switch (choice) {
-                case 1 :
+                case 1 : // TODO : Dang nhap
                     userController.login();
                     break;
-                case 2 :
+                case 2 : // TODO : Dang ky
                     userController.register();
                     break;
                 case 3 :
@@ -71,25 +66,25 @@ public class UI {
             System.out.println("Nhap lua chon cua ban :   ");
             choice = InpustMethods.getInteger();
             switch (choice){
-                case 1:
+                case 1: // TODO : Hien thi danh sach san pham
                     productController.getAll();
                     break;
-                case 2:
+                case 2: // TODO : Tim kiem san pham theo ten
                     productController.searchProductByName();
                     break;
-                case 3:
+                case 3: // TODO : Them san pham vao gio hang
                     cartController.addToCart();
                     break;
-                case 4:
+                case 4: // TODO : Quan ly gio hang
                     menuCart();
                     break;
-                case 5:
+                case 5: // TODO : Lich sua mua hang
                     menuOderHitStory();
                     break;
-                case 6:
+                case 6: // TODO : Thay doi thong tin ca nhan
                     userController.profileChange(userController.userLogin().getUserId());
                     break;
-                case 7:
+                case 7: // TODO : Thay doi mat khau
                     userController.changePassword(userController.userLogin().getUserId());
                     break;
                 case 0 :
@@ -118,19 +113,19 @@ public class UI {
             System.out.println("Nhap lua chon cua ban : ");
             selectCart = InpustMethods.getInteger();
             switch (selectCart){
-                case 1:
+                case 1: // TODO : Hien thi gio hang
                     cartController.showCart();
                     break;
-                case 2:
+                case 2: // TODO : Thay doi so luong san pham trong gio hang
                     cartController.changQuantity();
                     break;
-                case 3:
+                case 3: // TODO : Xoa 1 san pham khoi gio hang
                     cartController.deleteItemProduct();
                     break;
-                case 4:
+                case 4: // TODO : Xoa toan bo san pham khoi gio hang
                     cartController.clearAll();
                     break;
-                case 5:
+                case 5: // TODO : Thanh toan
                     orderController.endPay();
                     break;
                 case 6 :
@@ -155,19 +150,19 @@ public class UI {
             System.out.println("╚════════╧═════════════════════════════╝");
             int choice = InpustMethods.getInteger();
             switch (choice) {
-                case 1:
+                case 1: // TODO : Hien thi tat ca don hang
                     orderController.showAllOrder();
                     break;
-                case 2:
+                case 2: // TODO : Don hang dang cho xac nhan
                     orderController.showOrderByCode((byte) 0);
                     break;
-                case 3:
+                case 3: // TODO : Don hang da da xac nhan
                     orderController.showOrderByCode((byte) 1);
                     break;
-                case 4:
+                case 4: // TODO : HUy don hang
                     orderController.showOrderByCode((byte) 2);
                     break;
-                case 5:
+                case 5: // TODO : Chi tiet don hang
                     orderController.showOrderDetail();
                     break;
                 case 6:

@@ -85,33 +85,75 @@ public class OrderService {
         }
         return null;
     }
-
-    public void endPay() {
+    public double total(){
         User user = userService.userLogin();
-        Order newOrder = new Order();
-        newOrder.setId(getNewId());
-
-        // cap nhap tong tien
         double total = 0;
         for (Cart ca : user.getCart()) {
             total += ca.getProduct().getExportPrice() * ca.getQuantity();
         }
-        newOrder.setTotal(total);
-        newOrder.setIdUser(user.getUserId());
-        System.out.println("Nhap ten nguoi nhan hang");
-        newOrder.setReceiver(InpustMethods.getUseName());
-        newOrder.setNumberPhone(user.getPhone());
-        newOrder.setAddress(user.getAddress());
+        return total ;
+    }
 
-        // tien hanh tru di so luong trong kho hang
-        for (Cart ca : user.getCart()) {
-            Product pt = productController.findById(ca.getProduct().getProductId());
-            pt.setQuantity(ca.getProduct().getQuantity() - ca.getQuantity());
-            productController.save(pt);
+    public void endPay() {
+        User user = userService.userLogin();
+        Order newOrder = new Order();
+        showAllOrder();
+        System.out.println("Ban muon thanh toan : 1- Toan bo san pham      2- Mot san pham trong gio hang");
+        System.out.println("Nhap vao lua chon cua ban");
+        int choice = InpustMethods.getInteger();
+        switch (choice) {
+            case 1 : // TODO : Thanh toan toan bo
+                newOrder.setId(getNewId());
+                // cap nhap tong tien
+                double total = 0;
+                for (Cart ca : user.getCart()) {
+                    total += ca.getProduct().getExportPrice() * ca.getQuantity();
+                }
+                newOrder.setTotal(total);
+                newOrder.setIdUser(user.getUserId());
+                System.out.println("Nhap ten nguoi nhan hang");
+                newOrder.setReceiver(InpustMethods.getUseName());
+                newOrder.setNumberPhone(user.getPhone());
+                newOrder.setAddress(user.getAddress());
+
+                // tien hanh tru di so luong trong kho hang
+                for (Cart ca : user.getCart()) {
+                    Product pt = productController.findById(ca.getProduct().getProductId());
+                    pt.setQuantity(ca.getProduct().getQuantity() - ca.getQuantity());
+                    productController.save(pt);
+                }
+                newOrder.setOrderDetail(user.getCart());
+                save(newOrder);
+                cartController.clearAll();
+                break;
+            case 2: // TODO :  thanh toan 1 san pham
+                System.out.println("Nhap vao Id san pham can thanh toan ");
+                int id = InpustMethods.getInteger();
+                Product newProduct = productController.findById(id) ;
+                List<Cart> cart = user.getCart();
+                if (cart.contains(newProduct)) {
+                    newOrder.setId(getNewId());
+                    newOrder.setTotal(total());
+                    newOrder.setIdUser(user.getUserId());
+                    System.out.println("Nhap ten nguoi nhan hang");
+                    newOrder.setReceiver(InpustMethods.getUseName());
+                    newOrder.setNumberPhone(user.getPhone());
+                    newOrder.setAddress(user.getAddress());
+
+                    // tien hanh tru di so luong trong kho hang
+                    for (Cart ca : user.getCart()) {
+                        Product pt = productController.findById(ca.getProduct().getProductId());
+                        pt.setQuantity(ca.getProduct().getQuantity() - ca.getQuantity());
+                        productController.save(pt);
+                    }
+                    newOrder.setOrderDetail(cart);
+                    save(newOrder);
+                    cartController.delete(newProduct.getProductId());
+                }
+                break;
+            default:
+                System.err.println("❌❌❌ Lua chon khong phu hop. Vui long chon lai ❤ ");
         }
-        newOrder.setOrderDetail(user.getCart());
-        save(newOrder);
-        cartController.clearAll();
         UI.menuUser();
     }
 
@@ -184,5 +226,40 @@ public class OrderService {
         UI.menuUser();
     }
 
+    public void showOrderUsertoAdmin(){
+        for (Order o : orders) {
+            System.out.println("----------------------------------------------------------------");
+            o.display();
+            System.out.println("----------------------------------------------------------------");
+        }
+    }
+
+    public void OrderConfirm(){
+        System.out.println("Nhap ma don hang");
+        int idOrder = InpustMethods.getInteger();
+        Order orderConfirm = findById(idOrder) ;
+        if (orderConfirm == null) {
+            System.err.println("KHong tim thay don hang nay trong danh sach");
+        } else if (orderConfirm.getStatus() == 0 ) {
+            orderConfirm.display();
+            System.out.println("Ban muon xac nhan don hang nay chu");
+            System.out.println("1. Co ");
+            System.out.println("2. Khong");
+            System.out.println("Nhap lua chon cua ban");
+            int choice = InpustMethods.getInteger();
+            switch (choice) {
+                case 1 :
+                    orderConfirm.setStatus((byte) 1);
+                    save(orderConfirm);
+                    break;
+                case 2 :
+                    break;
+                default:
+                    System.err.println("❌❌❌ Lua chon khong phu hop. Vui long chon lai ❤ ");
+            }
+        } else if (orderConfirm.getStatus() == 1) {
+            System.out.println("Don hang nay khach hang da mua");
+        }
+    }
 
 }

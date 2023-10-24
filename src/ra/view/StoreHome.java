@@ -48,11 +48,11 @@ public class StoreHome {
         user.setActive(true);
         user.setUserStatus(false);
         user.setRoles(Role.ADMIN);
-        if (userList.contains(user)) {
-            System.out.println("");
-        } else {
+        if (userList.isEmpty()) {
             userList.add(user);
             userDataBase.writeToFile(userList, DataBase.USER_PATH);
+        } else {
+            System.out.println("");
         }
         // menu
         UI.menuStore();

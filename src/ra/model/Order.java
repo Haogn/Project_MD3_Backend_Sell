@@ -12,7 +12,6 @@ public class Order implements Serializable {
     private int id ;
     private int idUser ;
     private double total ;
-    private Date buyDate = new Date();
     private String receiver;
     private String numberPhone ;
     private Address address ;
@@ -23,11 +22,10 @@ public class Order implements Serializable {
 
     }
 
-    public Order(int id, int idUser, double total, Date buyDate, String receiver, String numberPhone, Address address, byte status, List<Cart> orderDetail) {
+    public Order(int id, int idUser, double total, String receiver, String numberPhone, Address address, byte status, List<Cart> orderDetail) {
         this.id = id;
         this.idUser = idUser;
         this.total = total;
-        this.buyDate = buyDate;
         this.receiver = receiver;
         this.numberPhone = numberPhone;
         this.address = address;
@@ -59,13 +57,6 @@ public class Order implements Serializable {
         this.total = total;
     }
 
-    public Date getBuyDate() {
-        return buyDate;
-    }
-
-    public void setBuyDate(Date buyDate) {
-        this.buyDate = buyDate;
-    }
 
     public String getReceiver() {
         return receiver;
@@ -111,5 +102,6 @@ public class Order implements Serializable {
         System.out.println("Don hang : " +id + " ➖ Ten nguoi nhan : "+receiver+ " ➖ So dien thoai : "+ numberPhone);
         System.out.println("Dia chi : " + address.getCity() + " ➖ " + address.getDistrict() + " ➖ " + address.getSpecifically());
         System.out.println("Trang thai : " + Message.getStatusByCode(status));
+        System.out.println("Tong tien : " + total + " USD");
     }
 }

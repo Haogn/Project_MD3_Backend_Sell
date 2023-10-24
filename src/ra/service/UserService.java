@@ -49,7 +49,7 @@ public class UserService {
             String name = InpustMethods.getUseName();
             boolean isDuplicate = false;
             for (User user : listUser) {
-                if (user.getUserName().equals(name.trim())) {
+                if (user.getUserName() != null && user.getUserName().equals(name.trim())) {
                     System.err.println("Ten nguoi dung da ton tai trong danh sach . Vui long nhap lai");
                     isDuplicate = true;
                     break;
@@ -64,16 +64,6 @@ public class UserService {
         newUser.setEmail(InpustMethods.getEmail());
         System.out.println("Nhap vao password : - ( Bao gom it nhat 8 ky tu , co 1 chu cai in hoa , 1 ky tu dac biet va khong chua khoang trang ) ");
         newUser.setPassword(InpustMethods.getPassword());
-        System.out.println("Nhap vao so dien thoai: ");
-        newUser.setPhone(InpustMethods.getPhoneNumber());
-        Address newAddress = new Address();
-        System.out.println("Nhap vao thanh pho :");
-        newAddress.setCity(InpustMethods.getString());
-        System.out.println("Nhap vao quan / huyen :");
-        newAddress.setDistrict(InpustMethods.getString());
-        System.out.println("Nhap vao dia chi cu the ");
-        newAddress.setSpecifically(InpustMethods.getString());
-        newUser.setAddress(newAddress);
         newUser.setUserStatus(false);
         newUser.setActive(true);
         newUser.setRoles(Role.USER);
@@ -97,7 +87,7 @@ public class UserService {
             boolean userFound = false;
 
             for (User user : userLogin) {
-                if (user.getEmail().equals(emailLogin)) {
+                if (user.getEmail() != null && user.getEmail().equals(emailLogin)) {
                     userFound = true;
                     if (user.isActive()) {
                         System.out.println("Nhap vao password:");
@@ -108,19 +98,21 @@ public class UserService {
 
                             if (user.getRoles() == Role.USER) {
                                 System.out.println("Dang nhap thanh cong");
-                                // Redirect to the user menu
+                                save(user);
                                 menuUser();
                             } else if (user.getRoles() == Role.ADMIN) {
                                 System.out.println("Dang nhap thanh cong");
-                                // Redirect to the admin menu
+                                save(user);
                                 Admin.menuAdmin();
                             }
+
                         } else {
                             System.err.println("Password khong trung khop. Vui long nhap lai ❤");
                         }
                     } else {
                         System.err.println("Tai khoan chua kich hoat. Vui long lien he voi quan tri vien.");
                     }
+
                     break;
                 }
             }
@@ -131,34 +123,10 @@ public class UserService {
         }
     }
 
-
-
-    // TODO : user dang dang nhap
-    public User userLogin() {
+    private void saveUserLogin(User user) {
         DataBase<User> userDataBase = new DataBase<>();
-        List<User> list = userDataBase.readFormFile(DataBase.USER_PATH);
-        for (User u : list) {
-            if (u.isUserStatus()) {
-                return u;
-            }
-        }
-        return null;
+        userDataBase.writeToFileLogin(user, DataBase.USER_LOGIN_PATH);
     }
-
-    // TODO : dang xuat
-    public void checkout() {
-        DataBase<User> userDataBase = new DataBase<>();
-        List<User> list = userDataBase.readFormFile(DataBase.USER_PATH);
-        for (User u : list) {
-            if (u.isUserStatus()) {
-                u.setUserStatus(false);
-                break;
-            }
-        }
-        menuStore();
-    }
-
-    // TODO : the moi hoac update
     public void save(User user) {
         if (finById(user.getUserId()) == null) {
             // TODO : add
@@ -170,6 +138,43 @@ public class UserService {
 
         userData.writeToFile(listUser, DataBase.USER_PATH);
     }
+
+
+    // TODO : user dang dang nhap
+    public User userLogin() {
+       DataBase<User> userDataBase = new DataBase<>();
+        return userDataBase.readUserFrom(DataBase.USER_LOGIN_PATH);
+    }
+    public User userCart(){
+        DataBase<User> userDataBase = new DataBase<>();
+        List<User> users = userDataBase.readFormFile(DataBase.USER_PATH);
+        User loginUser = userLogin();
+        for (User user : users) {
+            if (user.getUserId() == loginUser.getUserId()) {
+                return user;
+            }
+        }
+
+        return loginUser;
+    }
+
+    // TODO : dang xuat
+    public void checkout() {
+        DataBase<User> userDataBase = new DataBase<>();
+
+        User userCheckOut = userDataBase.readUserFrom(DataBase.USER_LOGIN_PATH);
+        listUser.add(userCheckOut);
+        userDataBase.writeToFile(listUser, DataBase.USER_PATH);
+        userCheckOut.setUserStatus(false);
+        save(userCheckOut);
+//        for (User u : list) {
+//                u.setUserStatus(false);
+//        }
+        menuStore();
+    }
+
+    // TODO : the moi hoac update
+
 
     // TODO : tim kiem theo Id
     public User finById(int id) {
@@ -186,8 +191,6 @@ public class UserService {
         System.out.println("__________________________ THONG TIN CA NHAN __________________________");
         System.out.println("Ten :" + user.getUserName());
         System.out.println("Email : " + user.getEmail());
-        System.out.println("So dien thoai : " + user.getPhone());
-        System.out.println("Dia chi : " + user.getAddress().getSpecifically() + " - " + user.getAddress().getDistrict() + " - " + user.getAddress().getCity());
         System.out.println("❤❤❤❤❤❤❤❤❤❤❤❤❤❤❤❤❤❤❤❤❤❤❤❤❤❤❤❤❤❤❤❤❤❤❤❤❤❤❤❤❤❤❤❤❤");
         System.out.println("");
         System.out.println("Ban muon thay doi thong tin khong ?");
@@ -204,25 +207,10 @@ public class UserService {
             newUser.setEmail(user.getEmail());
             newUser.setPassword(user.getPassword());
             newUser.setCart(user.getCart());
-            newUser.setPhone(user.getPhone());
-            newUser.setAddress(user.getAddress());
             newUser.setUserStatus(user.isUserStatus());
-
             // thay doi thong tin
             System.out.println("Nhap vao ten nguoi dung ");
             newUser.setUserName(InpustMethods.getUseName());
-            System.out.println("Nhap vao so dien thoai : ");
-            newUser.setPhone(InpustMethods.getPhoneNumber());
-            System.out.println("Nhap vao dia chi : ");
-            Address newAddress = new Address();
-            System.out.println("Thanh pho : ");
-            newAddress.setCity(InpustMethods.getString());
-            System.out.println("Quan / Huyen : ");
-            newAddress.setDistrict(InpustMethods.getString());
-            System.out.println("Dia chi cu the : ");
-            newAddress.setSpecifically(InpustMethods.getString());
-            newUser.setAddress(newAddress);
-
             System.out.println("-->>> Ban chac chan muon thay doi thong tin chu ? ( Co / Khong ) ");
             String check = InpustMethods.getString();
 

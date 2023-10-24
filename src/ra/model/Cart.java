@@ -45,4 +45,10 @@ public class Cart implements Serializable {
     public void display() {
         System.out.println("Id : " +cartId + " ➖ San pham " + product.getProductName() + " ➖ So luong " + quantity );
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        Cart o = (Cart) obj;
+        return this.getProduct().getProductId() == o.getProduct().getProductId() && this.getProduct().getProductName().equals(o.product.getProductName());
+    }
 }

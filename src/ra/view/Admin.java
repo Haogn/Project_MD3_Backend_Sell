@@ -1,15 +1,13 @@
 package ra.view;
 
 import ra.config.InpustMethods;
-import ra.controller.CatalogController;
-import ra.controller.OrderController;
-import ra.controller.ProductController;
-import ra.controller.UserController;
+import ra.controller.*;
 
 
 public class Admin {
     private static UserController userController = new UserController();
     private static CatalogController catalogController = new CatalogController();
+    private static CartController cartController = new CartController(userController.userLogin());
     private static ProductController productController = new ProductController();
     private static OrderController orderController = new OrderController();
 
